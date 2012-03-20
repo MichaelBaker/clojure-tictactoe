@@ -7,15 +7,19 @@
          http-server
          request-handler]))
 
+(def x "X")
+(def o "O")
+
 (defn str-to-token [token]
   (if (= token \_)
     nil
     token))
 
 (defn char-to-token [character]
-  (if (= character nil)
-    nil
-    (str character)))
+  (cond
+    (= character nil) nil
+    (= (str character) x) x
+    (= (str character) o) o))
 
 (defn token-to-str [token]
   (if (= nil token)
@@ -37,6 +41,7 @@
   (let [index (move-to-index move)
         token "O"
         board (vec board)]
+  (println (.toString board))
   (->> (assoc board index token)
     (map token-to-str)
     (reduce str ""))))
