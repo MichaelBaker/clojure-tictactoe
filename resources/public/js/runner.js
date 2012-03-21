@@ -24,21 +24,21 @@ jQuery(function() {
   var isAcceptingInput = function() { return acceptingInput; };
 
   var makeMoveRequest = function(callbacks) {
-    var getRequest = jQuery.get("move", {board : game.boardQueryString()});
+    var getRequest = jQuery.getJSON(game.boardQueryString());
 
     getRequest.success(function(data) {
       console.log(data);
-      //game = Game.fromArray(tokens, data.newBoard);
-      //drawBoard(game);
-      //if(data.winState === "in progress") {
-        //callbacks.continueGame();
-      //}
-      //else {
-        //callbacks.gameOver(data.winState);
-      //}
-    //});
-    //getRequest.error(function(){
-      //callbacks.continueGame();
+      game = Game.fromArray(tokens, data.newBoard);
+      drawBoard(game);
+      if(data.winState === "in progress") {
+        callbacks.continueGame();
+      }
+      else {
+        callbacks.gameOver(data.winState);
+      }
+    });
+    getRequest.error(function(){
+      callbacks.continueGame();
     });
   };
 

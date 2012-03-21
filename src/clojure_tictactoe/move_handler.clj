@@ -1,50 +1,49 @@
 (ns clojure-tictactoe.move-handler
   (:import MinMaxPlayer
-           Move))
+           Move)
+  (:use clojure.data.json))
 
-(def x "X")
-(def o "O")
+(def x-token "X")
+(def o-token "O")
 
-(defn str-to-token [token]
-  (if (= token \_)
-    nil
-    token))
+(defn win-state [board]
+  (let [game (MinMaxPlayer. board o-token x-token)]
+    (cond
+      (.maxWins game)     "O Wins"
+      (.minWins game)     "X Wins"
+      (.boardIsFull game) "Tie"
+      :elsewise           "in progress")))
 
-(defn char-to-token [character]
+(defn move-to-index [move]
+  (+ (* 3 (.getRow move))
+     (.getColumn move)))
+
+(defn make-new-board [board move]
+  (let [game (MinMaxPlayer. board o-token x-token)]
+    (if (or (.minWins game) (.boardIsFull game))
+      board
+      (do
+        (aset board (move-to-index move) o-token)
+        board))))
+
+(defn decode-char [char]
   (cond
-    (= character nil) nil
-    (= (str character) x) x
-    (= (str character) o) o))
-
-(defn token-to-str [token]
-  (if (= nil token)
-    "_"
-    token))
+    (= \_ char) nil
+    (= \X char) x-token
+    (= \O char) o-token))
 
 (defn string-to-board [string]
   (->> (.substring string 1)
-    (map str-to-token)
-    (map char-to-token)
-    (into-array String)))
-
-(defn move-to-index [move]
-  (let [row    (.getRow move)
-        column (.getColumn move)]
-    (+ (* row 3) column)))
-
-(defn new-board [board move]
-  (let [index (move-to-index move)
-        token "O"
-        board (vec board)]
-  (println (.toString board))
-  (->> (assoc board index token)
-    (map token-to-str)
-    (reduce str ""))))
+       (map decode-char)
+       (into-array String)))
 
 (defn move-handler [env]
-  (let [board   (string-to-board (:uri env))
-        ai-move (.nextMove (MinMaxPlayer. board "O" "X"))]
-    {:status 200
+  (let [board       (string-to-board (:uri env))
+        ai-move     (.nextMove (MinMaxPlayer. board o-token x-token))
+        array-board (make-new-board board ai-move)
+        win-state   (win-state array-board)]
+    {:status  200
      :headers {}
-     :body (new-board board ai-move)}))
+     :body    (json-str {:newBoard array-board
+                         :winState win-state})}))
 
