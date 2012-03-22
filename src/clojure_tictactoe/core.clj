@@ -5,13 +5,14 @@
 
 (defn make-dispatcher [file-handler move-handler]
   (fn [env]
-    (cond
-      (.startsWith (:uri env) "/public")
-        (file-handler env)
-      (= (:uri env) "/")
-        (file-handler (assoc env :uri "/public/index.html"))
-      :otherwise
-        (move-handler env))))
+    (let [request-string (:uri env)]
+      (cond
+        (.startsWith request-string "/public")
+          (file-handler env)
+        (= request-string "/")
+          (file-handler (assoc env :uri "/public/index.html"))
+        :otherwise
+          (move-handler env)))))
 
 (defn -main [& args]
   (let [[directory port] (parse-options args)
@@ -19,4 +20,5 @@
         request-dispatch (make-dispatcher file-handler move-handler)]
     (start-server port request-dispatch (fn [server]
       (println "Server is listening on port " port)
+      (println "Server is serving static files from " directory)
       (println "Press ^C to stop the server")))))
