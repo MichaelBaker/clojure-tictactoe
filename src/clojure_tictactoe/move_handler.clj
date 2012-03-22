@@ -44,6 +44,7 @@
         win-state   (win-state array-board)]
     {:status  200
      :headers {}
-     :body    (json-str {:newBoard array-board
-                         :winState win-state})}))
+     :body    (.getBytes
+                (json-str {:newBoard array-board
+                           :winState win-state}))}))
 
