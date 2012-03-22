@@ -1,10 +1,6 @@
 # clojure-tictactoe
 
-FIXME: write description
-
-## Usage
-
-FIXME: write
+This is a project for my 8th Light apprenticeship that combines my clojure-webserver project with my JavaTicTacToe project into a TicTacToe implementation that can be server via HTTP.
 
 ## License
 

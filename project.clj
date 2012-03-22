@@ -1,5 +1,5 @@
 (defproject clojure-tictactoe "1.0.0-SNAPSHOT"
-  :description  "FIXME: write description"
+  :description  "A TicTacToe project for my 8th Light apprenticeship."
   :dependencies [[org.clojure/clojure       "1.3.0"]
                  [michael/clojure-webserver "1.0.1"]
                  [michael/min-max-player    "1.0.2"]
