@@ -9,8 +9,8 @@
 (defn win-state [board]
   (let [game (MinMaxPlayer. board o-token x-token)]
     (cond
-      (.maxWins game)     "O Wins"
-      (.minWins game)     "X Wins"
+      (.maxWins game)     (str o-token " Wins")
+      (.minWins game)     (str x-token " Wins")
       (.boardIsFull game) "Tie"
       :elsewise           "in progress")))
 
