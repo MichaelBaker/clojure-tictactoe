@@ -17,4 +17,6 @@
   (let [[directory port] (parse-options args)
         file-handler     (request-handler (File. directory))
         request-dispatch (make-dispatcher file-handler move-handler)]
-    (start-server port request-dispatch)))
+    (start-server port request-dispatch (fn [server]
+      (println "Server is listening on port " port)
+      (println "Press ^C to stop the server")))))

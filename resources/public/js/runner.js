@@ -45,7 +45,7 @@ jQuery(function() {
   var endGame = function(message) {
     disableInput();
     var messageDiv  = jQuery("<div id='win-message'>");
-    var image       = jQuery("<img src='/static/images/WinFrame.png'>");
+    var image       = jQuery("<img src='/public/images/WinFrame.png'>");
     var messageSpan = jQuery("<span>").html(message);
     messageDiv.append(image).append(messageSpan);
     jQuery("#board").prepend(messageDiv);
